@@ -1,7 +1,9 @@
 // AI Project
 
 #include <iostream>
-#include <vector> 
+#include <vector>
+#include <fstream>
+#include <cstdlib> 
 #include "node.h"
 #include "source_node.h"
 
@@ -13,8 +15,13 @@ int main()
    myfile.open("input.txt");
    vector<Node> BayNet; //Bayesian Network data structure
    
-   int num_of_Snodes;
-   myfile >> num_of_Snodes; //Reads in # of source nodes
+   int num_of_Snodes, num_of_Cnodes;
+   myfile >> num_of_Snodes >> num_of_Cnodes; //Reads in # of source nodes and conditional nodes
+   int total_nodes = num_of_Cnodes + num_of_Snodes;
+   if(total_nodes < 7 || total_nodes > 10)
+   {
+      cout << "Error, number of nodes not within limits 7 and 10" << endl;
+   }
 
    char bool_name;
    int depth, num_of_edges;
@@ -38,7 +45,6 @@ int main()
       BayNet.push_back(baynode); //Add source node to network
    }
 
-   int num_of_Cnodes;
    myfile >> num_of_Cnodes;
 
    for(int i = 0; i < num_of_Cnodes; i++)

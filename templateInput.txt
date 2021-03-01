@@ -1,9 +1,8 @@
-numOfSourceNodes
+numOfSourceNodes numOfConditionalNodes
 node_name prior_prob depth
 numOfArcs [...] <- List of nodes it points to
 .
 . Repeat of lines 2-3 for each source node
 .
-numOfConditionalNodes
 node_name prior_prob depth
 ???
