@@ -4,7 +4,7 @@ Project for AI, CSE 5290
 
 ## :wrench:Compilation Instructions
 
-Compile project: `g++ main.cpp source_node.cpp node.cpp`
+Compile project: `g++ main.cpp source_node.cpp conditional_node.cpp node.cpp`
 
 Run code: `./a.out`
 
