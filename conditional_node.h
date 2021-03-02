@@ -15,7 +15,8 @@ public:
     vector<string> bool_values;
     vector<double> prob_values;
 
-    ConditionalNode(char name, int l, vector<char> arcs, int num_vars, vector<char> table_hdrs, vector<string> bool_vals, vector<double> prob_vals): Node(name, l, arcs) {
+    ConditionalNode(char name, int l, vector<char> arcs, int num_vars_in_table, vector<char> table_hdrs, vector<string> bool_vals, vector<double> prob_vals): Node(name, l, arcs) {
+        num_vars = num_vars_in_table;
         table_headers = table_hdrs;
         bool_values = bool_vals;
         prob_values = prob_vals;
