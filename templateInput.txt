@@ -1,8 +1,37 @@
-numOfSourceNodes numOfConditionalNodes
-node_name prior_prob depth
-numOfArcs [...] <- List of nodes it points to
-.
-. Repeat of lines 2-3 for each source node
-.
-node_name prior_prob depth
-???
+level
+num_nodes
+node_name prior_prob
+numArcs [list of arcs]
+node_name prior_prob
+numArcs [list of arcs]
+... repeat for num_nodes(all the source nodes)
+level
+num_nodes
+node_name
+num_var_in_table [list of vars]
+truth_values prob_value
+truth_values prob_value
+...... repeat for num_var_in_table
+numArcs [list of arcs]
+node_name
+num_var_in_table [list of vars]
+truth_values prob_value
+truth_values prob_value
+...... repeat for num_var_in_table
+numArcs [list of arcs]
+... repeat for num_nodes
+level
+num_nodes
+node_name
+num_var_in_table [list of vars]
+truth_values prob_value
+truth_values prob_value
+...... repeat for num_var_in_table
+numArcs [list of arcs]
+node_name
+num_var_in_table [list of vars]
+truth_values prob_value
+truth_values prob_value
+...... repeat for num_var_in_table
+numArcs [list of arcs]
+... repeat for num_nodes
