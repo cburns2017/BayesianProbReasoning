@@ -1,17 +1,30 @@
 # BayesianProbReasoning
 
-Project for AI, CSE 5290
+Assignment: AI Group Project, BayesianProbReasoning
+Course: CSE 4301, Spring 2021
+Students: Calvin Burns (`cburns2017@my.fit.edu`), Carlos Cepeda (`ccepeda2018@my.fit.edu`)
 
-## :wrench:Compilation Instructions
+## Dependencies 
 
-Compile project: `g++ main.cpp source_node.cpp conditional_node.cpp node.cpp`
+This project uses Python. Any install of Python > version 3 will work.
 
-Run code: `./a.out`
+On most systems, a python virtual environment should be created to run the project. If you have python and pip installed, you can use [venv](https://docs.python.org/3/library/venv.html#module-venv).
 
-## :package:Class Design
+Once you have a version of python setup, you can install the required dependency, `numpy`. 
 
-3 node type classes have been created:
+To do this, run: `pip install numpy`
 
-1. `Node` acts as the abstract base class for all node types in our program.
-2. `SourceNode` represents nodes that do not have a probability table and only have a prior probability value.
-3. `ConditionalNode` represents nodes with a probability table.
+## Compile and Run
+
+Compile and Run: `python main.py`
+
+## Class Design :package:
+
+After phase 1.1, we realized we had some fundamental issues with our implementation. We originally tried to use cpp vectors and rudimentary dictionary structures. When we went to implement the enumeration and query alogirthms, we realized our implementation would cause a lot of headaches.
+
+We chose to rewrite our code in Python so we could utilize Python's built-in dictonary and tuple datastructures. It also saved us a lot of Pain with datatype mismatches we ran into before. The conversion to Python allowed us to have only 1 node class. When choosing a format for saving our data, I consulted the resources below for recommended implementations.
+
+**Resources Used:**
+
+- https://github.com/aimacode/aima-python
+- https://github.com/sonph/bayesnetinference/blob/master/BayesNet.py
