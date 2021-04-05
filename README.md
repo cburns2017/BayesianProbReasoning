@@ -1,6 +1,8 @@
 # BayesianProbReasoning
 
-Project for AI, CSE 5290
+Assignment: AI Group Project, BayesianProbReasoning
+Course: CSE 4301, Spring 2021
+Students: Calvin Burns (`cburns2017@my.fit.edu`), Carlos Cepeda (`ccepeda2018@my.fit.edu`)
 
 ## Dependencies 
 
