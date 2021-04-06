@@ -7,23 +7,11 @@ Compile and Run: python main.py
 
 ---
 
-After phase 1.1, we realized we had some fundamental issues with our implementation. We
-originally tried to use cpp vectors and rudimentary dictionary structures. When we went
-to implement the enumeration and query alogirthms, we realized our implementation would cause
-a lot of headaches.
-
-We chose to rewrite our code in Python so we could utilize Python's built-in dictonary and
-tuple data structures. It also saved us a lot of Pain with datatype mismatches we ran into before.
-The conversion to python allowed us to have only 1 node class. When choosing a format for saving our
-data, I consulted the resources below for recommended implementations.
-
-Resources Used:
-https://github.com/aimacode/aima-python
-https://github.com/sonph/bayesnetinference/blob/master/BayesNet.py
+See README.md for full details on installation and class structure.
 
 ---
 
-Creating networks follow this pattern:
+Create networks following this pattern:
 
 example_network = BayesNet([
         ('VariableName0', '', 0.001),
@@ -31,6 +19,7 @@ example_network = BayesNet([
         ('VariableName2', 'VariableName0 VariableName1', {(True, True): 0.95, (True, False): 0.94, (False, True): 0.29, (False, False): 0.001}),
         ...
     ])
+
 VariableName0 and VariableName1 are prior probabilities. VariableName2 is a conditional probability
 with 0 and 1 as priors.
 
@@ -39,8 +28,8 @@ with 0 and 1 as priors.
 Enumeration ask returns a distribution like figure 14.9 from the textbook. To access the True or False
 values, use list indice syntax as follows:
 
-ans_dist[T] gives you the True value.
-ans_dist[F] gives you the False value.
+ans_dist[True] gives you the True value.
+ans_dist[False] gives you the False value.
 """
 
 import numpy as np

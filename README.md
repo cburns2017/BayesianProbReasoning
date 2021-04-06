@@ -77,7 +77,7 @@ A `table` has 2 forms. For source nodes, only an integer is passed. For conditio
 
 This object represents a distribution over the query variable. It was inspired by the use of a *"distribution over X"* in the Enumerate-Ask algorithm from the textbook(Figure 14.9). 
 
-The object is dynamically programmed so it could hold more than 2 values but for the purpose of this problem, it only holds `True` and `False` with corresponding probability values.
+The object is dynamically programmed so it could hold more than 2 values but for the purpose of this problem, it only holds `True` and `False` with corresponding probability values. To fetch a single one of these values use `dictionary[True]` or `dictionary[False]`.
 
 The main purpose of the `Distribution` object is the `normalize` method. I followed the textbooks formula for normalization from Chapter 13.9.
 
