@@ -13,7 +13,7 @@ to implement the enumeration and query alogirthms, we realized our implementatio
 a lot of headaches.
 
 We chose to rewrite our code in Python so we could utilize Python's built-in dictonary and
-tuple datastructures. It also saved us a lot of Pain with datatype mismatches we ran into before.
+tuple data structures. It also saved us a lot of Pain with datatype mismatches we ran into before.
 The conversion to python allowed us to have only 1 node class. When choosing a format for saving our
 data, I consulted the resources below for recommended implementations.
 
@@ -28,11 +28,10 @@ Creating networks follow this pattern:
 example_network = BayesNet([
         ('VariableName0', '', 0.001),
         ('VariableName1', '', 0.002),
-        ('VariableName2', 'VariableName0 VariableName1',
-         {(T, T): 0.95, (T, F): 0.94, (F, T): 0.29, (F, F): 0.001}),
+        ('VariableName2', 'VariableName0 VariableName1', {(T, T): 0.95, (T, F): 0.94, (F, T): 0.29, (F, F): 0.001}),
         ...
     ])
-VariableName0 and VariableName1 are prior probabilities. VariableName2 is a conditional probability 
+VariableName0 and VariableName1 are prior probabilities. VariableName2 is a conditional probability
 with 0 and 1 as priors.
 
 ---
@@ -49,9 +48,12 @@ import numpy as np
 # Global Vars
 T, F = True, False
 
+"""
+UTILITY FUNCTIONS
+"""
 
 def extend_e(e, var, val):
-    """Copy and append value to dictionary.
+    """Copy dict and append value to new dict.
     For example:
     e = {'JohnCalls': True, 'MaryCalls': True}
     var = 'NewVar'
@@ -59,8 +61,14 @@ def extend_e(e, var, val):
     The function returns:
     {'JohnCalls': True, 'MaryCalls': True, 'NewVar': False}
     """
-    return {**e, var: val}
+    new_dict = e.copy()
+    new_dict[var] = val
+    return new_dict
 
+
+"""
+CLASS/OBJECT DEFINITIONS
+"""
 
 class Distribution:
     """
@@ -80,10 +88,8 @@ class Distribution:
 
     def __getitem__(self, val):
         """Given a value, return P(value)."""
-        try:
-            return self.prob[val]
-        except KeyError:
-            return 0
+        return self.prob[val]
+
 
     def __setitem__(self, val, p):
         """Set P(val) = p."""
@@ -107,7 +113,7 @@ class Distribution:
         """
         Overwrites the string cast operation for a Distribution object
         """
-        return "P({})".format(self.name) + " " + str(self.prob)
+        return str(self.prob)
 
 
 class Node:
@@ -153,7 +159,17 @@ class Node:
         """
         Overwrites the string cast operation for a Node object
         """
-        return repr((self.variable, ' '.join(self.parents)))
+        value = 'P(' + self.variable
+        if self.parents:
+            value = value + '|' + ', '.join(self.parents) + ')\n'
+            value = value + str(self.parents) + '\n'
+            for v, p in self.table.items():
+                value = value + str(v) + ' \t' + str(p) + '\n'
+        else:
+            value = value + ')\n'
+            for v, p in self.table.items():
+                value = value + str(p) + '\n'
+        return value
 
 
 class BayesNet:
@@ -194,8 +210,15 @@ class BayesNet:
         raise Exception("Variable does not exist: {}".format(var))
 
     def __repr__(self):
-        return 'BayesNet({0!r})'.format(self.nodes)
+        value = ""
+        for n in self.nodes:
+            value += str(n) + '\n'
+        return value
 
+
+"""
+ENUMERATION ALGORITHMS
+"""
 
 def enumerate_all(vars, e, bn):
     """
@@ -229,17 +252,21 @@ def enumeration_ask(X, e, bn):
     return Q.normalize()
 
 
+"""
+MAIN
+"""
+
 def main():
     example_network = BayesNet([
         ('Burglary', '', 0.001),
         ('Earthquake', '', 0.002),
-        ('Alarm', 'Burglary Earthquake',
-         {(T, T): 0.95, (T, F): 0.94, (F, T): 0.29, (F, F): 0.001}),
+        ('Alarm', 'Burglary Earthquake', {(T, T): 0.95, (T, F): 0.94, (F, T): 0.29, (F, F): 0.001}),
         ('JohnCalls', 'Alarm', {T: 0.90, F: 0.05}),
         ('MaryCalls', 'Alarm', {T: 0.70, F: 0.01})
     ])
+    print(example_network)
     ans_dist = enumeration_ask('JohnCalls', {'MaryCalls': True}, example_network)
-    print('P(JohnCalls|MaryCalls) = ' + str(ans_dist[T]))
+    print('P(JohnCalls|MaryCalls) = ' + str(ans_dist))
 
 if __name__ == "__main__":
     main()
