@@ -28,3 +28,27 @@ We chose to rewrite our code in Python so we could utilize Python's built-in dic
 
 - https://github.com/aimacode/aima-python
 - https://github.com/sonph/bayesnetinference/blob/master/BayesNet.py
+
+## Sample Input/Output
+
+Input Network:
+```
+example_network = BayesNet([
+        ('Burglary', '', 0.001),
+        ('Earthquake', '', 0.002),
+        ('Alarm', 'Burglary Earthquake', {(T, T): 0.95, (T, F): 0.94, (F, T): 0.29, (F, F): 0.001}),
+        ('JohnCalls', 'Alarm', {T: 0.90, F: 0.05}),
+        ('MaryCalls', 'Alarm', {T: 0.70, F: 0.01})
+    ])
+```
+
+Run `enum_ask` for query "P(JohnCalls|MaryCalls)":
+```
+ans_dist = enum_ask('JohnCalls', {'MaryCalls': True}, example_network)
+print(ans_dist)
+```
+
+Output of `ans_dist`:
+```
+P(JohnCalls|MaryCalls) = {True: 0.1775766000872957, False: 0.8224233999127043}
+```

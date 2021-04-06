@@ -74,7 +74,7 @@ class Distribution:
     """
     Represents a discrete probability distribution.
 
-    Used in the enumerate_ask function. In all cases, a prob dist
+    Used in the enum_ask function. In all cases, a prob dist
     object will have at most 2 values, the first is the positive, second
     is the negative value.
 
@@ -220,7 +220,7 @@ class BayesNet:
 ENUMERATION ALGORITHMS
 """
 
-def enumerate_all(vars, e, bn):
+def enum_all(vars, e, bn):
     """
     For a given list of variables and list of observed variables, enumerate
     all combinations.
@@ -232,12 +232,12 @@ def enumerate_all(vars, e, bn):
     Y, rest = vars[0], vars[1:]
     node = bn.get_node(Y)
     if Y in e:
-        return node.p(e[Y], e) * enumerate_all(rest, e, bn)
+        return node.p(e[Y], e) * enum_all(rest, e, bn)
     else:
-        return sum(node.p(y, e) * enumerate_all(rest, extend_e(e, Y, y), bn) for y in [True, False])
+        return sum(node.p(y, e) * enum_all(rest, extend_e(e, Y, y), bn) for y in [True, False])
 
 
-def enumeration_ask(X, e, bn):
+def enum_ask(X, e, bn):
     """
     Given a query variable, observed values, and network, compute the conditional
     probability.
@@ -248,7 +248,7 @@ def enumeration_ask(X, e, bn):
     """
     Q = Distribution(X)
     for xi in [True, False]:
-        Q[xi] = enumerate_all(bn.variables, extend_e(e, X, xi), bn)
+        Q[xi] = enum_all(bn.variables, extend_e(e, X, xi), bn)
     return Q.normalize()
 
 
@@ -265,7 +265,7 @@ def main():
         ('MaryCalls', 'Alarm', {T: 0.70, F: 0.01})
     ])
     print(example_network)
-    ans_dist = enumeration_ask('JohnCalls', {'MaryCalls': True}, example_network)
+    ans_dist = enum_ask('JohnCalls', {'MaryCalls': True}, example_network)
     print('P(JohnCalls|MaryCalls) = ' + str(ans_dist))
 
 if __name__ == "__main__":
