@@ -1,8 +1,10 @@
 # BayesianProbReasoning
 
-Assignment: AI Group Project, BayesianProbReasoning
-Course: CSE 4301, Spring 2021
-Students: Calvin Burns (`cburns2017@my.fit.edu`), Carlos Cepeda (`ccepeda2018@my.fit.edu`)
+**Assignment:** AI Group Project, BayesianProbReasoning
+
+**Course:** CSE 4301, Spring 2021
+
+**Students:** Calvin Burns `cburns2017@my.fit.edu`, Carlos Cepeda `ccepeda2018@my.fit.edu`
 
 ## Dependencies 
 
@@ -31,7 +33,8 @@ We chose to rewrite our code in Python so we could utilize Python's built-in dic
 
 ## Sample Input/Output
 
-Input Network:
+
+**Input Network:**
 ```
 example_network = BayesNet([
         ('Burglary', '', 0.001),
@@ -42,13 +45,15 @@ example_network = BayesNet([
     ])
 ```
 
-Run `enum_ask` for query "P(JohnCalls|MaryCalls)":
+
+**Run `enum_ask` for query `P(JohnCalls|MaryCalls)`:**
 ```
 ans_dist = enum_ask('JohnCalls', {'MaryCalls': True}, example_network)
 print(ans_dist)
 ```
 
-Output of `ans_dist`:
+
+**Output of `ans_dist`:**
 ```
 P(JohnCalls|MaryCalls) = {True: 0.1775766000872957, False: 0.8224233999127043}
 ```
