@@ -28,7 +28,7 @@ Creating networks follow this pattern:
 example_network = BayesNet([
         ('VariableName0', '', 0.001),
         ('VariableName1', '', 0.002),
-        ('VariableName2', 'VariableName0 VariableName1', {(T, T): 0.95, (T, F): 0.94, (F, T): 0.29, (F, F): 0.001}),
+        ('VariableName2', 'VariableName0 VariableName1', {(True, True): 0.95, (True, False): 0.94, (False, True): 0.29, (False, False): 0.001}),
         ...
     ])
 VariableName0 and VariableName1 are prior probabilities. VariableName2 is a conditional probability
@@ -44,9 +44,6 @@ ans_dist[F] gives you the False value.
 """
 
 import numpy as np
-
-# Global Vars
-T, F = True, False
 
 """
 UTILITY FUNCTIONS
@@ -87,12 +84,12 @@ class Distribution:
         self.values = []
 
     def __getitem__(self, val):
-        """Given a value, return P(value)."""
+        """Get prob value using val as a key. Val will be True or False"""
         return self.prob[val]
 
 
     def __setitem__(self, val, p):
-        """Set P(val) = p."""
+        """add a value to the prob dictionary"""
         if val not in self.values:
             self.values.append(val)
         self.prob[val] = p
@@ -134,10 +131,12 @@ class Node:
             parents = parents.split()
         self.parents = parents
 
-        if isinstance(table, (float, int)):  # no parents, 0-tuple, evidence nodes
+        if isinstance(table, (float, int)):  # no parents, evidence nodes
+            # assign an empty table
             table = {(): table}
         elif isinstance(table, dict): # some parents, n-tuple, conditional nodes
             if table and isinstance(list(table.keys())[0], bool):
+                # create table
                 table = {(v,): p for v, p in table.items()}
         self.table = table
 
@@ -146,6 +145,8 @@ class Node:
         Get value from table using val and observed events.
         tuple([event[var] for var in self.parents]) produces the
         parent values, the values of parents for the event node.
+
+        Math syntax is similar to: P(A|e) or P(A)
 
         If a val is not given, the inverse probability is returned.
         """
@@ -260,9 +261,9 @@ def main():
     example_network = BayesNet([
         ('Burglary', '', 0.001),
         ('Earthquake', '', 0.002),
-        ('Alarm', 'Burglary Earthquake', {(T, T): 0.95, (T, F): 0.94, (F, T): 0.29, (F, F): 0.001}),
-        ('JohnCalls', 'Alarm', {T: 0.90, F: 0.05}),
-        ('MaryCalls', 'Alarm', {T: 0.70, F: 0.01})
+        ('Alarm', 'Burglary Earthquake', {(True, True): 0.95, (True, False): 0.94, (False, True): 0.29, (False, False): 0.001}),
+        ('JohnCalls', 'Alarm', {True: 0.90, False: 0.05}),
+        ('MaryCalls', 'Alarm', {True: 0.70, False: 0.01})
     ])
     print(example_network)
     ans_dist = enum_ask('JohnCalls', {'MaryCalls': True}, example_network)
