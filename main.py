@@ -247,16 +247,32 @@ MAIN
 """
 
 def main():
-    example_network = BayesNet([
-        ('Burglary', '', 0.001),
-        ('Earthquake', '', 0.002),
-        ('Alarm', 'Burglary Earthquake', {(True, True): 0.95, (True, False): 0.94, (False, True): 0.29, (False, False): 0.001}),
-        ('JohnCalls', 'Alarm', {True: 0.90, False: 0.05}),
-        ('MaryCalls', 'Alarm', {True: 0.70, False: 0.01})
+    # FLORIDA RED TIDE NETWORK
+    florida_red_tide_network = BayesNet([
+        ('Summer', '', 0.25),
+        ('14DayAvgRainFall>3in', 'Summer', {True: 0.78, False: 0.22}),
+        ('14DayAvgWaterTemp>80F', 'Summer', {True: 0.82, False: 0.18}),
+        ('14DayAvgWindSpeed<10MPH', 'Summer', {True: 0.52, False: 0.48}),
+        ('DischargeFromOkeechobee', '14DayAvgRainFall>3in', {True: 0.98, False: 0.02}),
+        ('RedTideEvent', '14DayAvgWaterTemp>80F 14DayAvgWindSpeed<10MPH DischargeFromOkeechobee', {
+            (True, True, True): 0.32, 
+            (True, True, False): 0.03, 
+            (True, False, False): 0.02, 
+            (False, True, True): 0.23, 
+            (True, False, True): 0.27, 
+            (False, False, True): 0.11, 
+            (False, True, False): 0.01, 
+            (False, False, False): 0.01,
+        }),
     ])
-    print(example_network)
-    ans_dist = enum_ask('JohnCalls', {'MaryCalls': True}, example_network)
-    print('P(JohnCalls|MaryCalls) = ' + str(ans_dist))
+    print('Florida Red Tide Bayesian Network:\n')
+    ans_dist = enum_ask('RedTideEvent', {'Summer': True}, florida_red_tide_network)
+    print('P(RedTideEvent|Summer) = ' + str(ans_dist))
+    ans_dist = enum_ask('DischargeFromOkeechobee', {'RedTideEvent': True}, florida_red_tide_network)
+    print('P(DischargeFromOkeechobee|RedTideEvent) = ' + str(ans_dist))
+    ans_dist = enum_ask('RedTideEvent', {'Summer': True, '14DayAvgWaterTemp>80F': True, 'DischargeFromOkeechobee': False}, florida_red_tide_network)
+    print('P(RedTideEvent|Summer, 14DayAvgWaterTemp>80F, 14DayAvgWindSpeed<10MPH, ~DischargeFromOkeechobee) = ' + str(ans_dist))
+    # END FLORIDA RED TIDE NETWORK
 
 if __name__ == "__main__":
     main()
