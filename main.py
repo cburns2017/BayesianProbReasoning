@@ -274,5 +274,51 @@ def main():
     print('P(RedTideEvent|Summer, 14DayAvgWaterTemp>80F, 14DayAvgWindSpeed<10MPH, ~DischargeFromOkeechobee) = ' + str(ans_dist))
     # END FLORIDA RED TIDE NETWORK
 
+    # CRASH LANDING NETWORK
+    crash_landing_network = BayesNet([
+        ('Engine1Fail', '', 0.01),
+        ('Engine2Fail', '', 0.01),
+        ('Engine3Fail', '', 0.01),
+        ('Engine4Fail', '', 0.01),
+        ('TimeInAir>2hr', '', 0.58),
+        ('SevereWeather', '', 0.23),
+        ('DistanceFromAirport>20mi', 'TimeInAir>2hr', {True: 0.78, False: 0.22}),
+        ('LeftWingEngineFail', 'Engine1Fail Engine2Fail', {
+            (True, True): 0.60,
+            (True, False): 0.20,
+            (False, True): 0.20,
+            (False, False): 0
+            }),
+        ('RightWingEngineFail', 'Engine2Fail Engine3Fail', {
+            (True, True): 0.60,
+            (True, False): 0.20,
+            (False, True): 0.20,
+            (False, False): 0
+            }),
+        ('TotalEngineFailure', 'LeftWingEngineFail RightWingEngineFail', {
+            (True, True): 0.60,
+            (True, False): 0.20,
+            (False, True): 0.20,
+            (False, False): 0
+            }),
+        ('CrashLanding', 'TotalEngineFailure DistanceFromAirport>20mi SevereWeather', {
+            (True, True, True): 0.38,
+            (True, True, False): 0.29,
+            (True, False, True): 0.14,
+            (True, False, False): 0.09,
+            (False, True, True): 0.02,
+            (False, True, False): 0.01,
+            (False, False, True): 0.06,
+            (False, False, False): 0.01,
+            })
+    ])
+    print('Crash Landing Bayesian Network:\n')
+    ans_dist = enum_ask('CrashLanding', {'TotalEngineFailure': True, 'DistanceFromAirport>20mi': True, 'SevereWeather': True}, crash_landing_network)
+    print('P(CrashLanding|TotalEngineFailure, DistanceFromAirport>20mi, SevereWeather) = ' + str(ans_dist))
+    ans_dist = enum_ask('DistanceFromAirport>20mi', {'RightWingEngineFail': True}, crash_landing_network)
+    print('P(DistanceFromAirport>20mi|RightWingEngineFail) = ' + str(ans_dist))
+    ans_dist = enum_ask('CrashLanding', {'TimeInAir>2hr': False}, crash_landing_network)
+    print('P(CrashLanding|~TimeInAir>2hr) = ' + str(ans_dist))
+
 if __name__ == "__main__":
     main()
