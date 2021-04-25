@@ -319,6 +319,47 @@ def main():
     print('P(DistanceFromAirport>20mi|RightWingEngineFail) = ' + str(ans_dist))
     ans_dist = enum_ask('CrashLanding', {'TimeInAir>2hr': False}, crash_landing_network)
     print('P(CrashLanding|~TimeInAir>2hr) = ' + str(ans_dist))
+    # END CRASH LANDING NETWORK
+
+    # STUDENT FUTURE NETWORK
+    student_future_network = BayesNet([
+        ('STEMMajor', '', 0.50),
+        ('IvyLeague', '', 0.01),
+        ('Procrastinate', '', 0.75),
+        ('Gpa', 'STEMMajor IvyLeague Procrastinate', {
+            (True, True, True): 0.01,
+            (True, True, False): 0.05,
+            (True, False, True): 0.10,
+            (True, False, False): 0.20,
+            (False, True, True): 0.10,
+            (False, True, False): 0.12,
+            (False, False, True): 0.12,
+            (False, False, False): 0.30
+            }),
+        ('Recommendation', 'Gpa', {True: 0.75, False: 0.25}),
+        ('Internship', 'Gpa Recommendation', {
+            (True, True): 0.65,
+            (True, False): 0.10,
+            (False, True): 0.20,
+            (False, False): 0.05
+            }),
+        ('GraduatingTop20', 'Gpa', {True: 0.80, False: 0.20}),
+        ('Career', 'GraduatingTop20 Internship', {
+            (True, True): 0.70,
+            (True, False): 0.20,
+            (False, True): 0.05,
+            (False, False): 0.05
+            }),
+        ('PayingLoans', 'Career', {True: 0.75, False: 0.25})
+    ])
+    print('Student Future Bayesian Network:\n')
+    ans_dist = enum_ask('Career', {'Gpa': False, 'IvyLeague': True, 'STEMMajor': False}, student_future_network)
+    print('P(Career|~Gpa, IvyLeague, ~STEMMajor) = ' + str(ans_dist))
+    ans_dist = enum_ask('PayingLoans', {'STEMMajor': False, 'GraduatingTop20': False, 'IvyLeague': True}, student_future_network)
+    print('P(PayingLoans|~STEMMajor, ~GraduatingTop20, IvyLeague) = ' + str(ans_dist))
+    ans_dist = enum_ask('Recommendation', {'IvyLeague': True, 'Procrastinate': True}, student_future_network)
+    print('P(Recommendation|IvyLeague, Procrastinate) = ' + str(ans_dist))
+    # END STUDENT FUTURE NETWORK
 
 if __name__ == "__main__":
     main()
